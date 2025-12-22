@@ -7,3 +7,16 @@ node_modules/
 dist/ / build/
 
 .venv/ / __pycache__/
+
+# dependencies
+node_modules/
+
+# env
+.env
+
+# mac
+.DS_Store
+
+# build
+/dist
+/build
