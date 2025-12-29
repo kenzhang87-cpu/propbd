@@ -5,6 +5,7 @@ import bcrypt from "bcrypt";
 import { initDb, run, all, get } from "./db.js";
 
 const PORT = process.env.PORT || 4001;
+const HOST = process.env.HOST || "0.0.0.0";
 const JWT_SECRET = process.env.JWT_SECRET || "dev-secret";
 
 initDb();
@@ -175,6 +176,6 @@ function safeParse(str, fallback) {
   }
 }
 
-app.listen(PORT, "127.0.0.1", () => {
-  console.log(`PropBD backend running on http://127.0.0.1:${PORT}`);
+app.listen(PORT, HOST, () => {
+  console.log(`PropBD backend running on http://${HOST}:${PORT}`);
 });
