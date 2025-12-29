@@ -2,11 +2,15 @@ import express from "express";
 import cors from "cors";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
+import path from "path";
+import { fileURLToPath } from "url";
 import { initDb, run, all, get } from "./db.js";
 
 const PORT = process.env.PORT || 4001;
 const HOST = process.env.HOST || "0.0.0.0";
 const JWT_SECRET = process.env.JWT_SECRET || "dev-secret";
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const clientDir = path.join(__dirname, "client");
 
 initDb();
 
@@ -175,6 +179,12 @@ function safeParse(str, fallback) {
     return fallback;
   }
 }
+
+// Serve the client as static assets so deployed environments can use same origin
+app.use(express.static(clientDir));
+app.get("*", (_req, res) => {
+  res.sendFile(path.join(clientDir, "index.html"));
+});
 
 app.listen(PORT, HOST, () => {
   console.log(`PropBD backend running on http://${HOST}:${PORT}`);
