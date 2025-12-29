@@ -175,6 +175,6 @@ function safeParse(str, fallback) {
   }
 }
 
-app.listen(PORT, () => {
-  console.log(`PropBD backend running on http://localhost:${PORT}`);
+app.listen(PORT, "127.0.0.1", () => {
+  console.log(`PropBD backend running on http://127.0.0.1:${PORT}`);
 });
