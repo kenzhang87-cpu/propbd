@@ -1,13 +1,20 @@
 import sqlite3 from "sqlite3";
 import path from "path";
+import fs from "fs";
 import { fileURLToPath } from "url";
 import bcrypt from "bcrypt";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-const dbPath = path.join(__dirname, "data.db");
+const bundledDb = path.join(__dirname, "data.db");
+const runtimeDb = process.env.VERCEL ? path.join("/tmp", "data.db") : bundledDb;
 
-const db = new sqlite3.Database(dbPath);
+// On read-only deployments (e.g., Vercel) copy the bundled DB into /tmp for writes
+if (process.env.VERCEL && !fs.existsSync(runtimeDb) && fs.existsSync(bundledDb)) {
+  fs.copyFileSync(bundledDb, runtimeDb);
+}
+
+const db = new sqlite3.Database(runtimeDb);
 
 export function initDb() {
 db.serialize(() => {
